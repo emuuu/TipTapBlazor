@@ -1,0 +1,21 @@
+@inherits LayoutComponentBase
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            TipTapBlazor
+            <small>Interactive Demo</small>
+        </div>
+        <nav>
+            <NavLink href="" Match="NavLinkMatch.All">Basic Editor</NavLink>
+            <NavLink href="toolbar">Custom Toolbar</NavLink>
+            <NavLink href="mentions">Mentions</NavLink>
+            <NavLink href="api">Programmatic API</NavLink>
+            <NavLink href="readonly">Read-Only</NavLink>
+            <NavLink href="theming">Theming</NavLink>
+        </nav>
+    </aside>
+    <main class="main-content">
+        @Body
+    </main>
+</div>

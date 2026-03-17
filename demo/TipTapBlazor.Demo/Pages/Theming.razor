@@ -1,0 +1,58 @@
+@page "/theming"
+
+<PageTitle>Theming - TipTapBlazor Demo</PageTitle>
+
+<h1>Theming</h1>
+<p class="subtitle">Customize the editor appearance via CSS custom properties. All <code>--ttp-*</code> variables can be overridden.</p>
+
+<h2>Custom Theme</h2>
+<div class="demo-section">
+    <p>This editor uses a custom green theme by overriding CSS variables on the wrapper.</p>
+
+    <div style="--ttp-primary: #2e7d32; --ttp-border: #c8e6c9; --ttp-toolbar-bg: #e8f5e9; --ttp-toolbar-border: #a5d6a7; --ttp-hover-bg: #c8e6c9; --ttp-active-bg: #a5d6a7; --ttp-placeholder-color: #66bb6a;">
+        <TipTapEditor @bind-Value="_greenContent"
+                      Placeholder="A green-themed editor..."
+                      Height="150px" />
+    </div>
+</div>
+
+<h2>Compact Theme</h2>
+<div class="demo-section">
+    <p>Smaller radius, smaller fonts, tighter padding via CSS variables and <code>CssClass</code>.</p>
+
+    <div style="--ttp-radius: 2px; --ttp-font-size: 0.85rem;">
+        <TipTapEditor @bind-Value="_compactContent"
+                      CssClass="compact-editor"
+                      Placeholder="Compact editor..."
+                      Height="120px" />
+    </div>
+</div>
+
+<h2>CSS Variables Reference</h2>
+<div class="demo-section">
+    <div class="output-panel">
+        <label>Available CSS Custom Properties</label>
+--ttp-primary         Accent color (buttons, links, highlights)
+--ttp-border          Editor border color
+--ttp-bg              Editor background
+--ttp-toolbar-bg      Toolbar background
+--ttp-toolbar-border  Toolbar separator color
+--ttp-hover-bg        Button hover background
+--ttp-active-bg       Active button background
+--ttp-font-family     Editor font stack
+--ttp-font-size       Editor base font size
+--ttp-radius          Border radius
+--ttp-placeholder-color  Placeholder text color
+--ttp-code-bg         Code block background
+--ttp-code-fg         Code block text color
+--ttp-code-inline-bg  Inline code background
+--ttp-blockquote-color   Blockquote text color
+--ttp-focus-ring      Focus outline style
+--ttp-shadow          Dropdown shadow
+    </div>
+</div>
+
+@code {
+    private string _greenContent = "<p>Everything is <strong>green</strong> here.</p>";
+    private string _compactContent = "<p>A more compact look for dense UIs.</p>";
+}

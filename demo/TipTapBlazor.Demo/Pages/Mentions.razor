@@ -1,0 +1,79 @@
+@page "/mentions"
+
+<PageTitle>Mentions - TipTapBlazor Demo</PageTitle>
+
+<h1>Mentions</h1>
+<p class="subtitle">Type <code>@@</code> to trigger the mention dropdown. Provide a search function and handle selection.</p>
+
+<h2>Mention Demo</h2>
+<div class="demo-section">
+    <p>Try typing <code>@@al</code> or <code>@@ber</code> to search for people and places.</p>
+
+    <TipTapEditor @bind-Value="_content"
+                  Options="@_options"
+                  MentionSearchFunc="SearchMentions"
+                  OnMentionClicked="OnMentionSelected"
+                  Placeholder="@("Type @ to mention someone...")"
+                  Height="200px" />
+
+    @if (_selectedMentions.Count > 0)
+    {
+        <div class="mention-log">
+            <label style="font-size:0.75rem; font-weight:600; color:var(--color-muted); text-transform:uppercase; letter-spacing:0.05em;">Selected Mentions</label>
+            @foreach (var m in _selectedMentions)
+            {
+                <span class="mention-chip">@@@m.DisplayName (@m.Category)</span>
+            }
+        </div>
+    }
+
+    <div class="output-panel">
+        <label>HTML Output</label>
+        @_content
+    </div>
+</div>
+
+@code {
+    private string _content = "";
+    private readonly List<MentionItem> _selectedMentions = [];
+
+    private readonly EditorOptions _options = new()
+    {
+        EnableMention = true,
+        EnableTable = false,
+        EnableFontFamily = false,
+        EnableSubscript = false,
+        EnableSuperscript = false,
+    };
+
+    private static readonly MentionItem[] AllMentions =
+    [
+        new() { Id = "1", DisplayName = "Alice Johnson", Category = "person" },
+        new() { Id = "2", DisplayName = "Bob Smith", Category = "person" },
+        new() { Id = "3", DisplayName = "Charlie Brown", Category = "person" },
+        new() { Id = "4", DisplayName = "Diana Prince", Category = "person" },
+        new() { Id = "5", DisplayName = "Berlin", Category = "place" },
+        new() { Id = "6", DisplayName = "Barcelona", Category = "place" },
+        new() { Id = "7", DisplayName = "New York", Category = "place" },
+        new() { Id = "8", DisplayName = "Tokyo", Category = "place" },
+        new() { Id = "9", DisplayName = "bug", Category = "tag" },
+        new() { Id = "10", DisplayName = "feature", Category = "tag" },
+        new() { Id = "11", DisplayName = "urgent", Category = "tag" },
+    ];
+
+    private Task<IEnumerable<MentionItem>> SearchMentions(string query)
+    {
+        var results = AllMentions
+            .Where(m => m.DisplayName.Contains(query, StringComparison.OrdinalIgnoreCase))
+            .Take(5);
+        return Task.FromResult(results);
+    }
+
+    private void OnMentionSelected(MentionItem item)
+    {
+        if (!_selectedMentions.Any(m => m.Id == item.Id))
+        {
+            _selectedMentions.Add(item);
+        }
+    }
+}

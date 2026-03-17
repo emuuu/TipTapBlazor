@@ -1,0 +1,9 @@
+<Solution>
+  <Project Path="TipTapBlazor/TipTapBlazor.csproj" />
+  <Folder Name="/tests/">
+    <Project Path="tests/TipTapBlazor.Tests/TipTapBlazor.Tests.csproj" />
+  </Folder>
+  <Folder Name="/demo/">
+    <Project Path="demo/TipTapBlazor.Demo/TipTapBlazor.Demo.csproj" />
+  </Folder>
+</Solution>

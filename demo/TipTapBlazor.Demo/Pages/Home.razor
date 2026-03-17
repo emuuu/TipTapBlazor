@@ -1,0 +1,41 @@
+@page "/"
+
+<PageTitle>Basic Editor - TipTapBlazor Demo</PageTitle>
+
+<h1>Basic Editor</h1>
+<p class="subtitle">Full-featured rich text editor with two-way binding via <code>@@bind-Value</code>.</p>
+
+<h2>Default Configuration</h2>
+<div class="demo-section">
+    <p>All toolbar features enabled. Type below to see the HTML output update in real-time.</p>
+
+    <TipTapEditor @bind-Value="_content"
+                  Placeholder="Start typing here..."
+                  Height="250px" />
+
+    <div class="output-panel">
+        <label>HTML Output</label>
+        @_content
+    </div>
+</div>
+
+<h2>With Character Count</h2>
+<div class="demo-section">
+    <p>Character counter in the footer. Set a max length to show the limit.</p>
+
+    <TipTapEditor @bind-Value="_countContent"
+                  Options="@_countOptions"
+                  Placeholder="Limited to 200 characters..."
+                  Height="150px" />
+</div>
+
+@code {
+    private string _content = "<p>Hello <strong>TipTapBlazor</strong>! Try out the toolbar above.</p>";
+    private string _countContent = "";
+
+    private readonly EditorOptions _countOptions = new()
+    {
+        EnableCharacterCount = true,
+        MaxLength = 200,
+    };
+}

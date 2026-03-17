@@ -1,0 +1,30 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.nuget.props
+*.nuget.targets
+
+## NuGet
+*.nupkg
+*.snupkg
+
+## Visual Studio
+.vs/
+*.csproj.user
+
+## JetBrains
+.idea/
+*.sln.iml
+
+## Node
+node_modules/
+## Build artifacts
+wwwroot/js/tiptap-bundle.js
+
+## OS
+.DS_Store
+Thumbs.db

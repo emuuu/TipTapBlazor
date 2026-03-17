@@ -1,0 +1,51 @@
+@page "/readonly"
+
+<PageTitle>Read-Only - TipTapBlazor Demo</PageTitle>
+
+<h1>Read-Only Mode</h1>
+<p class="subtitle">Toggle <code>ReadOnly</code> to switch between editing and viewing. The toolbar hides automatically.</p>
+
+<h2>Live Toggle</h2>
+<div class="demo-section">
+    <div class="toggle-row">
+        <label>
+            <input type="checkbox" @bind="_readOnly" /> Read-Only
+        </label>
+    </div>
+
+    <TipTapEditor @bind-Value="_content"
+                  ReadOnly="@_readOnly"
+                  Height="200px" />
+</div>
+
+<h2>Always Read-Only</h2>
+<div class="demo-section">
+    <p>Useful for displaying rich text content without editing. No toolbar, no cursor.</p>
+
+    <TipTapEditor Value="@_staticContent"
+                  ReadOnly="true"
+                  Height="auto" />
+</div>
+
+@code {
+    private bool _readOnly;
+
+    private string _content = "<h2>Editable Content</h2><p>Toggle the checkbox above to switch between <strong>edit</strong> and <strong>read-only</strong> mode. Notice how the toolbar disappears.</p><blockquote>This is a blockquote to show formatting is preserved.</blockquote>";
+
+    private const string _staticContent = """
+        <h2>Release Notes v1.0</h2>
+        <p>We are excited to announce the first stable release of <strong>TipTapBlazor</strong>.</p>
+        <h3>Features</h3>
+        <ul>
+            <li>Full toolbar with configurable feature groups</li>
+            <li>Two-way binding via <code>@bind-Value</code></li>
+            <li>@mention support with async search</li>
+            <li>Table editing with insert, merge, and delete</li>
+            <li>Syntax-highlighted code blocks via Lowlight</li>
+            <li>Dark mode support via CSS custom properties</li>
+            <li>WCAG AA accessible toolbar</li>
+        </ul>
+        <h3>Requirements</h3>
+        <p>.NET 8.0, 9.0, or 10.0 with Blazor Server or WebAssembly.</p>
+        """;
+}

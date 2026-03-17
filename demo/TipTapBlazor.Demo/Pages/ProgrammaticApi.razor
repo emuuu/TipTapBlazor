@@ -1,0 +1,122 @@
+@page "/api"
+
+<PageTitle>Programmatic API - TipTapBlazor Demo</PageTitle>
+
+<h1>Programmatic API</h1>
+<p class="subtitle">Control the editor from C# code using <code>GetContentAsync</code>, <code>SetContentAsync</code>, and <code>FocusAsync</code>.</p>
+
+<h2>Set Content</h2>
+<div class="demo-section">
+    <p>Click a button to programmatically set the editor content.</p>
+
+    <div class="btn-group">
+        <button class="btn" @onclick="SetSampleHtml">Set Sample HTML</button>
+        <button class="btn" @onclick="SetTableHtml">Set Table</button>
+        <button class="btn" @onclick="ClearContent">Clear</button>
+        <button class="btn btn-primary" @onclick="FocusEditor">Focus Editor</button>
+    </div>
+
+    <TipTapEditor @ref="_editor"
+                  @bind-Value="_content"
+                  Placeholder="Use the buttons above..."
+                  Height="200px" />
+
+    <div class="output-panel">
+        <label>Current Value (two-way bound)</label>
+        @_content
+    </div>
+</div>
+
+<h2>Get Content</h2>
+<div class="demo-section">
+    <p>
+        <code>GetContentAsync()</code> reads directly from the JS editor instance, independent of the bound value.
+    </p>
+
+    <div class="btn-group">
+        <button class="btn btn-primary" @onclick="ReadContent">Read Content from Editor</button>
+    </div>
+
+    @if (_readContent is not null)
+    {
+        <div class="output-panel">
+            <label>GetContentAsync() result</label>
+            @_readContent
+        </div>
+    }
+</div>
+
+<h2>Custom Link/Image Dialogs</h2>
+<div class="demo-section">
+    <p>
+        Override the default <code>window.prompt</code> with custom callbacks.
+        Click the link or image button in the toolbar below.
+    </p>
+
+    <TipTapEditor @bind-Value="_dialogContent"
+                  OnLinkUrlRequested="PromptForLink"
+                  OnImageUrlRequested="PromptForImage"
+                  Placeholder="Click the link or image button..."
+                  Height="150px" />
+
+    @if (_lastDialogAction is not null)
+    {
+        <div class="output-panel">
+            <label>Last Dialog Result</label>
+            @_lastDialogAction
+        </div>
+    }
+</div>
+
+@inject IJSRuntime JS
+
+@code {
+    private TipTapEditor _editor = default!;
+    private string _content = "";
+    private string? _readContent;
+    private string _dialogContent = "";
+    private string? _lastDialogAction;
+
+    private async Task SetSampleHtml()
+    {
+        var html = "<h2>Hello from C#</h2><p>This content was set via <code>SetContentAsync()</code>.</p><ul><li>Item 1</li><li>Item 2</li></ul>";
+        await _editor.SetContentAsync(html);
+    }
+
+    private async Task SetTableHtml()
+    {
+        var html = "<table><thead><tr><th>Name</th><th>Role</th></tr></thead><tbody><tr><td>Alice</td><td>Developer</td></tr><tr><td>Bob</td><td>Designer</td></tr></tbody></table>";
+        await _editor.SetContentAsync(html);
+    }
+
+    private async Task ClearContent()
+    {
+        await _editor.SetContentAsync("");
+    }
+
+    private async Task FocusEditor()
+    {
+        await _editor.FocusAsync();
+    }
+
+    private async Task ReadContent()
+    {
+        _readContent = await _editor.GetContentAsync();
+    }
+
+    private async Task<string?> PromptForLink()
+    {
+        var url = await JS.InvokeAsync<string?>("prompt", "Enter link URL (custom dialog):", "https://github.com");
+        _lastDialogAction = url is not null ? $"Link URL: {url}" : "Link cancelled";
+        StateHasChanged();
+        return url;
+    }
+
+    private async Task<string?> PromptForImage()
+    {
+        var url = await JS.InvokeAsync<string?>("prompt", "Enter image URL (custom dialog):", "https://picsum.photos/400/200");
+        _lastDialogAction = url is not null ? $"Image URL: {url}" : "Image cancelled";
+        StateHasChanged();
+        return url;
+    }
+}

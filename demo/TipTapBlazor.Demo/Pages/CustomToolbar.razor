@@ -1,0 +1,154 @@
+@page "/toolbar"
+
+<PageTitle>Custom Toolbar - TipTapBlazor Demo</PageTitle>
+
+<h1>Custom Toolbar</h1>
+<p class="subtitle">Selectively enable or disable toolbar groups via <code>EditorOptions</code>.</p>
+
+<h2>Minimal Editor</h2>
+<div class="demo-section">
+    <p>Only bold, italic, and lists. No tables, no colors, no code blocks.</p>
+
+    <TipTapEditor @bind-Value="_minimalContent"
+                  Options="@_minimalOptions"
+                  Placeholder="A simple notes editor..."
+                  Height="180px" />
+</div>
+
+<h2>Code-Focused Editor</h2>
+<div class="demo-section">
+    <p>Inline code, code blocks with syntax highlighting, and basic formatting.</p>
+
+    <TipTapEditor @bind-Value="_codeContent"
+                  Options="@_codeOptions"
+                  Placeholder="Write some code documentation..."
+                  Height="200px" />
+</div>
+
+<h2>Toggle Features Live</h2>
+<div class="demo-section">
+    <p>Toggle features and watch the toolbar update.</p>
+
+    <div class="btn-group">
+        <label class="toggle-row">
+            <input type="checkbox" @bind="_showBold" @bind:after="RebuildOptions" /> Bold
+        </label>
+        <label class="toggle-row">
+            <input type="checkbox" @bind="_showItalic" @bind:after="RebuildOptions" /> Italic
+        </label>
+        <label class="toggle-row">
+            <input type="checkbox" @bind="_showLists" @bind:after="RebuildOptions" /> Lists
+        </label>
+        <label class="toggle-row">
+            <input type="checkbox" @bind="_showTable" @bind:after="RebuildOptions" /> Table
+        </label>
+        <label class="toggle-row">
+            <input type="checkbox" @bind="_showColors" @bind:after="RebuildOptions" /> Colors
+        </label>
+        <label class="toggle-row">
+            <input type="checkbox" @bind="_showAlign" @bind:after="RebuildOptions" /> Alignment
+        </label>
+    </div>
+
+    <TipTapEditor @bind-Value="_toggleContent"
+                  Options="@_toggleOptions"
+                  Height="180px" />
+</div>
+
+@code {
+    private string _minimalContent = "";
+    private string _codeContent = "";
+    private string _toggleContent = "<p>Toggle the checkboxes above to add or remove toolbar features.</p>";
+
+    private readonly EditorOptions _minimalOptions = new()
+    {
+        EnableBold = true,
+        EnableItalic = true,
+        EnableUnderline = false,
+        EnableStrike = false,
+        EnableCode = false,
+        EnableSubscript = false,
+        EnableSuperscript = false,
+        EnableBlockquote = false,
+        EnableBulletList = true,
+        EnableOrderedList = true,
+        EnableTaskList = false,
+        EnableCodeBlock = false,
+        EnableHorizontalRule = false,
+        EnableHeading = true,
+        EnableTextAlign = false,
+        EnableColor = false,
+        EnableHighlight = false,
+        EnableFontFamily = false,
+        EnableLink = true,
+        EnableImage = false,
+        EnableTable = false,
+        EnableUndoRedo = true,
+    };
+
+    private readonly EditorOptions _codeOptions = new()
+    {
+        EnableBold = true,
+        EnableItalic = true,
+        EnableUnderline = false,
+        EnableStrike = false,
+        EnableCode = true,
+        EnableSubscript = false,
+        EnableSuperscript = false,
+        EnableBlockquote = true,
+        EnableBulletList = true,
+        EnableOrderedList = true,
+        EnableTaskList = false,
+        EnableCodeBlock = true,
+        EnableHorizontalRule = true,
+        EnableHeading = true,
+        EnableTextAlign = false,
+        EnableColor = false,
+        EnableHighlight = false,
+        EnableFontFamily = false,
+        EnableLink = true,
+        EnableImage = false,
+        EnableTable = false,
+        EnableUndoRedo = true,
+    };
+
+    // Toggle demo
+    private bool _showBold = true;
+    private bool _showItalic = true;
+    private bool _showLists = true;
+    private bool _showTable;
+    private bool _showColors;
+    private bool _showAlign;
+    private EditorOptions _toggleOptions = new();
+
+    protected override void OnInitialized() => RebuildOptions();
+
+    private void RebuildOptions()
+    {
+        _toggleOptions = new EditorOptions
+        {
+            EnableBold = _showBold,
+            EnableItalic = _showItalic,
+            EnableUnderline = false,
+            EnableStrike = false,
+            EnableCode = false,
+            EnableSubscript = false,
+            EnableSuperscript = false,
+            EnableBlockquote = false,
+            EnableBulletList = _showLists,
+            EnableOrderedList = _showLists,
+            EnableTaskList = false,
+            EnableCodeBlock = false,
+            EnableHorizontalRule = false,
+            EnableHeading = true,
+            EnableTextAlign = _showAlign,
+            EnableColor = _showColors,
+            EnableHighlight = _showColors,
+            EnableFontFamily = false,
+            EnableLink = false,
+            EnableImage = false,
+            EnableTable = _showTable,
+            EnableUndoRedo = true,
+        };
+    }
+}

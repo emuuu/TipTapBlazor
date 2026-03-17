@@ -1,0 +1,197 @@
+@namespace TipTapBlazor
+
+<div class="ttp-editor-wrapper @_readOnlyClass @CssClass" @attributes="UserAttributes">
+    @if (!ReadOnly)
+    {
+        <div class="ttp-toolbar" role="toolbar" aria-label="Text formatting">
+            @* History Group *@
+            @if (_toolbarFeatures.ShowHistoryGroup)
+            {
+                <div class="ttp-toolbar-group">
+                    <button type="button" class="ttp-toolbar-btn" title="Undo" aria-label="Undo" @onclick="CmdUndo">&#x21B6;</button>
+                    <button type="button" class="ttp-toolbar-btn" title="Redo" aria-label="Redo" @onclick="CmdRedo">&#x21B7;</button>
+                </div>
+            }
+
+            @* Heading Group *@
+            @if (_toolbarFeatures.ShowHeadingGroup)
+            {
+                <div class="ttp-toolbar-group">
+                    <div class="ttp-toolbar-dropdown">
+                        <select value="@CurrentHeadingLevel" aria-label="Block type" @onchange="OnHeadingChanged">
+                            <option value="0">Paragraph</option>
+                            <option value="1">Heading 1</option>
+                            <option value="2">Heading 2</option>
+                            <option value="3">Heading 3</option>
+                            <option value="4">Heading 4</option>
+                        </select>
+                    </div>
+                </div>
+            }
+
+            @* Formatting Group *@
+            @if (_toolbarFeatures.ShowFormattingGroup)
+            {
+                <div class="ttp-toolbar-group">
+                    @if (Options.EnableBold)
+                    {
+                        <button type="button" class="ttp-toolbar-btn @(ActiveClass("bold"))" title="Bold" aria-label="Bold" aria-pressed="@IsActiveStr("bold")" @onclick="CmdToggleBold"><b>B</b></button>
+                    }
+                    @if (Options.EnableItalic)
+                    {
+                        <button type="button" class="ttp-toolbar-btn @(ActiveClass("italic"))" title="Italic" aria-label="Italic" aria-pressed="@IsActiveStr("italic")" @onclick="CmdToggleItalic"><i>I</i></button>
+                    }
+                    @if (Options.EnableUnderline)
+                    {
+                        <button type="button" class="ttp-toolbar-btn @(ActiveClass("underline"))" title="Underline" aria-label="Underline" aria-pressed="@IsActiveStr("underline")" @onclick="CmdToggleUnderline"><u>U</u></button>
+                    }
+                    @if (Options.EnableStrike)
+                    {
+                        <button type="button" class="ttp-toolbar-btn @(ActiveClass("strike"))" title="Strikethrough" aria-label="Strikethrough" aria-pressed="@IsActiveStr("strike")" @onclick="CmdToggleStrike"><s>S</s></button>
+                    }
+                    @if (Options.EnableCode)
+                    {
+                        <button type="button" class="ttp-toolbar-btn @(ActiveClass("code"))" title="Inline Code" aria-label="Inline Code" aria-pressed="@IsActiveStr("code")" @onclick="CmdToggleCode">&lt;/&gt;</button>
+                    }
+                    @if (Options.EnableSubscript)
+                    {
+                        <button type="button" class="ttp-toolbar-btn @(ActiveClass("subscript"))" title="Subscript" aria-label="Subscript" aria-pressed="@IsActiveStr("subscript")" @onclick="CmdToggleSubscript">X&#x2082;</button>
+                    }
+                    @if (Options.EnableSuperscript)
+                    {
+                        <button type="button" class="ttp-toolbar-btn @(ActiveClass("superscript"))" title="Superscript" aria-label="Superscript" aria-pressed="@IsActiveStr("superscript")" @onclick="CmdToggleSuperscript">X&#x00B2;</button>
+                    }
+                </div>
+            }
+
+            @* Font Group *@
+            @if (_toolbarFeatures.ShowFontGroup)
+            {
+                <div class="ttp-toolbar-group">
+                    <div class="ttp-toolbar-dropdown">
+                        <select value="@_currentFontFamily" aria-label="Font family" @onchange="OnFontFamilyChanged">
+                            <option value="">Default</option>
+                            <option value="Arial">Arial</option>
+                            <option value="Georgia">Georgia</option>
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Courier New">Courier New</option>
+                            <option value="Verdana">Verdana</option>
+                        </select>
+                    </div>
+                </div>
+            }
+
+            @* Color Group *@
+            @if (_toolbarFeatures.ShowColorGroup)
+            {
+                <div class="ttp-toolbar-group">
+                    @if (Options.EnableColor)
+                    {
+                        <input type="color" class="ttp-toolbar-color" title="Text Color" aria-label="Text Color" value="@_textColor" @onchange="OnTextColorChanged" />
+                    }
+                    @if (Options.EnableHighlight)
+                    {
+                        <button type="button" class="ttp-toolbar-btn @(ActiveClass("highlight"))" title="Highlight" aria-label="Highlight" aria-pressed="@IsActiveStr("highlight")" @onclick="CmdToggleHighlight">&#x1F58D;</button>
+                    }
+                </div>
+            }
+
+            @* Alignment Group *@
+            @if (_toolbarFeatures.ShowAlignmentGroup)
+            {
+                <div class="ttp-toolbar-group">
+                    <button type="button" class="ttp-toolbar-btn @(ActiveClass("alignLeft"))" title="Align Left" aria-label="Align Left" aria-pressed="@IsActiveStr("alignLeft")" @onclick="CmdAlignLeft">&#x2261;</button>
+                    <button type="button" class="ttp-toolbar-btn @(ActiveClass("alignCenter"))" title="Align Center" aria-label="Align Center" aria-pressed="@IsActiveStr("alignCenter")" @onclick="CmdAlignCenter">&#x2263;</button>
+                    <button type="button" class="ttp-toolbar-btn @(ActiveClass("alignRight"))" title="Align Right" aria-label="Align Right" aria-pressed="@IsActiveStr("alignRight")" @onclick="CmdAlignRight">&#x2262;</button>
+                    <button type="button" class="ttp-toolbar-btn @(ActiveClass("alignJustify"))" title="Justify" aria-label="Justify" aria-pressed="@IsActiveStr("alignJustify")" @onclick="CmdAlignJustify">&#x2630;</button>
+                </div>
+            }
+
+            @* List Group *@
+            @if (_toolbarFeatures.ShowListGroup)
+            {
+                <div class="ttp-toolbar-group">
+                    @if (Options.EnableBulletList)
+                    {
+                        <button type="button" class="ttp-toolbar-btn @(ActiveClass("bulletList"))" title="Bullet List" aria-label="Bullet List" aria-pressed="@IsActiveStr("bulletList")" @onclick="CmdToggleBulletList">&#x2022;</button>
+                    }
+                    @if (Options.EnableOrderedList)
+                    {
+                        <button type="button" class="ttp-toolbar-btn @(ActiveClass("orderedList"))" title="Ordered List" aria-label="Ordered List" aria-pressed="@IsActiveStr("orderedList")" @onclick="CmdToggleOrderedList">1.</button>
+                    }
+                    @if (Options.EnableTaskList)
+                    {
+                        <button type="button" class="ttp-toolbar-btn @(ActiveClass("taskList"))" title="Task List" aria-label="Task List" aria-pressed="@IsActiveStr("taskList")" @onclick="CmdToggleTaskList">&#x2611;</button>
+                    }
+                    @if (Options.EnableBlockquote)
+                    {
+                        <button type="button" class="ttp-toolbar-btn @(ActiveClass("blockquote"))" title="Blockquote" aria-label="Blockquote" aria-pressed="@IsActiveStr("blockquote")" @onclick="CmdToggleBlockquote">&#x201C;</button>
+                    }
+                </div>
+            }
+
+            @* Insert Group *@
+            @if (_toolbarFeatures.ShowInsertGroup)
+            {
+                <div class="ttp-toolbar-group">
+                    @if (Options.EnableLink)
+                    {
+                        <button type="button" class="ttp-toolbar-btn @(ActiveClass("link"))" title="Link" aria-label="Link" aria-pressed="@IsActiveStr("link")" @onclick="OnLinkClicked">&#x1F517;</button>
+                    }
+                    @if (Options.EnableImage)
+                    {
+                        <button type="button" class="ttp-toolbar-btn" title="Image" aria-label="Insert Image" @onclick="OnImageClicked">&#x1F5BC;</button>
+                    }
+                    @if (Options.EnableHorizontalRule)
+                    {
+                        <button type="button" class="ttp-toolbar-btn" title="Horizontal Rule" aria-label="Horizontal Rule" @onclick="CmdSetHorizontalRule">&#x2015;</button>
+                    }
+                    @if (Options.EnableCodeBlock)
+                    {
+                        <button type="button" class="ttp-toolbar-btn @(ActiveClass("codeBlock"))" title="Code Block" aria-label="Code Block" aria-pressed="@IsActiveStr("codeBlock")" @onclick="CmdToggleCodeBlock">{}</button>
+                    }
+                </div>
+            }
+
+            @* Table Group *@
+            @if (_toolbarFeatures.ShowTableGroup)
+            {
+                <div class="ttp-toolbar-group ttp-toolbar-group--table">
+                    <button type="button" class="ttp-toolbar-btn @(ActiveClass("table"))" title="Table" aria-label="Table" aria-haspopup="menu" aria-expanded="@(_showTableMenu ? "true" : "false")" @onclick="ToggleTableMenu">&#x25A6;</button>
+                    @if (_showTableMenu)
+                    {
+                        <div class="ttp-menu-overlay" @onclick="CloseTableMenu"></div>
+                        <div class="ttp-table-menu" role="menu" @onkeydown="OnTableMenuKeyDown">
+                            <button type="button" role="menuitem" @onclick="CmdInsertTable">Insert Table</button>
+                            <button type="button" role="menuitem" @onclick="CmdAddRowBefore">Add Row Before</button>
+                            <button type="button" role="menuitem" @onclick="CmdAddRowAfter">Add Row After</button>
+                            <button type="button" role="menuitem" @onclick="CmdAddColumnBefore">Add Column Before</button>
+                            <button type="button" role="menuitem" @onclick="CmdAddColumnAfter">Add Column After</button>
+                            <button type="button" role="menuitem" @onclick="CmdDeleteRow">Delete Row</button>
+                            <button type="button" role="menuitem" @onclick="CmdDeleteColumn">Delete Column</button>
+                            <button type="button" role="menuitem" @onclick="CmdMergeCells">Merge Cells</button>
+                            <button type="button" role="menuitem" @onclick="CmdSplitCell">Split Cell</button>
+                            <button type="button" role="menuitem" @onclick="CmdDeleteTable">Delete Table</button>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+
+    <div class="ttp-editor-content" id="@_editorId" @ref="_editorElement" style="@HeightStyle"></div>
+
+    @if (Options.EnableCharacterCount)
+    {
+        <div class="ttp-footer">
+            @if (Options.MaxLength > 0)
+            {
+                <span>@_characterCount / @Options.MaxLength</span>
+            }
+            else
+            {
+                <span>@_characterCount characters</span>
+            }
+        </div>
+    }
+</div>

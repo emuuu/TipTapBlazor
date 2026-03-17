@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+		<IsPackable>true</IsPackable>
+		<PackageId>TipTapBlazor</PackageId>
+		<Description>Blazor Razor Class Library wrapping the TipTap rich-text editor with a full toolbar UI</Description>
+		<PackageTags>blazor;tiptap;richtext;editor;prosemirror;wysiwyg</PackageTags>
+		<GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<SupportedPlatform Include="browser" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="TipTapBlazor.Tests" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.24" Condition="'$(TargetFramework)' == 'net8.0'" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.13" Condition="'$(TargetFramework)' == 'net9.0'" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.3" Condition="'$(TargetFramework)' == 'net10.0'" />
+	</ItemGroup>
+
+	<!-- Exclude npm/JS source files from the build -->
+	<ItemGroup>
+		<Content Remove="node_modules\**" />
+		<Content Remove="src\**" />
+		<None Remove="node_modules\**" />
+		<None Remove="src\**" />
+	</ItemGroup>
+
+	<!-- npm build pipeline -->
+	<Target Name="NpmInstall" BeforeTargets="PreBuildEvent"
+			Inputs="package.json;package-lock.json"
+			Outputs="node_modules\.package-lock.json">
+		<Exec Command="npm install" WorkingDirectory="$(MSBuildProjectDirectory)" />
+	</Target>
+
+	<Target Name="NpmBuild" BeforeTargets="PreBuildEvent" DependsOnTargets="NpmInstall"
+			Inputs="src\tiptap-extensions.js;package.json;package-lock.json"
+			Outputs="wwwroot\js\tiptap-bundle.js">
+		<Exec Command="npm run build" WorkingDirectory="$(MSBuildProjectDirectory)" />
+	</Target>
+
+</Project>
