@@ -20,7 +20,7 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.24" Condition="'$(TargetFramework)' == 'net8.0'" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.13" Condition="'$(TargetFramework)' == 'net9.0'" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.3" Condition="'$(TargetFramework)' == 'net10.0'" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.7" Condition="'$(TargetFramework)' == 'net10.0'" />
 	</ItemGroup>
 
 	<!-- Exclude npm/JS source files from the build -->
@@ -30,17 +30,16 @@
 		<None Remove="node_modules\**" />
 		<None Remove="src\**" />
 	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.203" />
+	</ItemGroup>
 
 	<!-- npm build pipeline -->
-	<Target Name="NpmInstall" BeforeTargets="PreBuildEvent"
-			Inputs="package.json;package-lock.json"
-			Outputs="node_modules\.package-lock.json">
+	<Target Name="NpmInstall" BeforeTargets="PreBuildEvent" Inputs="package.json;package-lock.json" Outputs="node_modules\.package-lock.json">
 		<Exec Command="npm install" WorkingDirectory="$(MSBuildProjectDirectory)" />
 	</Target>
 
-	<Target Name="NpmBuild" BeforeTargets="PreBuildEvent" DependsOnTargets="NpmInstall"
-			Inputs="src\tiptap-extensions.js;package.json;package-lock.json"
-			Outputs="wwwroot\js\tiptap-bundle.js">
+	<Target Name="NpmBuild" BeforeTargets="PreBuildEvent" DependsOnTargets="NpmInstall" Inputs="src\tiptap-extensions.js;package.json;package-lock.json" Outputs="wwwroot\js\tiptap-bundle.js">
 		<Exec Command="npm run build" WorkingDirectory="$(MSBuildProjectDirectory)" />
 	</Target>
 
