@@ -77,6 +77,11 @@ Disable features you don't need via `EditorOptions`:
 
 Toolbar groups hide automatically when all features in the group are disabled.
 
+### Base64 Images
+
+Images with `src="data:image/..."` are kept by default. Set `AllowBase64Images = false` to drop them
+while parsing — note that this also strips existing base64 images from stored content on the next save.
+
 ## Mentions
 
 ```razor

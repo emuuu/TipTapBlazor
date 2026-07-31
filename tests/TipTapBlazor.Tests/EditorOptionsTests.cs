@@ -51,6 +51,7 @@ public class EditorOptionsTests
             Assert.That(options.EnableFontFamily, Is.True);
             Assert.That(options.EnableLink, Is.True);
             Assert.That(options.EnableImage, Is.True);
+            Assert.That(options.AllowBase64Images, Is.True);
             Assert.That(options.EnableTable, Is.True);
             Assert.That(options.EnablePlaceholder, Is.True);
             Assert.That(options.EnableUndoRedo, Is.True);
