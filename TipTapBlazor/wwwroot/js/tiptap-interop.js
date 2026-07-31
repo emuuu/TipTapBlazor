@@ -354,7 +354,10 @@ function buildExtensions(options, dotNetRef) {
     }
 
     if (options.enableImage) {
-        extensions.push(Image.configure({ inline: true }));
+        extensions.push(Image.configure({
+            inline: true,
+            allowBase64: options.allowBase64Images !== false,
+        }));
     }
 
     if (options.enableCodeBlock) {

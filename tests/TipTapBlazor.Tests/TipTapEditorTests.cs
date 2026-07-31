@@ -327,4 +327,24 @@ public class TipTapEditorTests : BunitContext
 
         await cut.Instance.DisposeAsync();
     }
+
+    [Test]
+    public void AllowBase64Images_DefaultsToTrueInJsOptions()
+    {
+        Render<TipTapEditor>();
+
+        var optionsJson = (string)_moduleInterop.Invocations["create"].Single().Arguments[1]!;
+        Assert.That(optionsJson, Does.Contain("\"allowBase64Images\":true"));
+    }
+
+    [Test]
+    public void AllowBase64Images_PassedToJsWhenDisabled()
+    {
+        var options = new EditorOptions { AllowBase64Images = false };
+
+        Render<TipTapEditor>(p => p.Add(e => e.Options, options));
+
+        var optionsJson = (string)_moduleInterop.Invocations["create"].Single().Arguments[1]!;
+        Assert.That(optionsJson, Does.Contain("\"allowBase64Images\":false"));
+    }
 }

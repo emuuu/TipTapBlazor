@@ -141,6 +141,7 @@ public partial class TipTapEditor : ComponentBase, IAsyncDisposable
                 enableFontFamily = Options.EnableFontFamily,
                 enableLink = Options.EnableLink,
                 enableImage = Options.EnableImage,
+                allowBase64Images = Options.AllowBase64Images,
                 enableTable = Options.EnableTable,
                 enableMention = Options.EnableMention,
                 enableCharacterCount = Options.EnableCharacterCount,

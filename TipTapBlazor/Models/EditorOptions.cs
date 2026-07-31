@@ -66,6 +66,12 @@ public class EditorOptions
     /// <summary>Enables the image insertion button.</summary>
     public bool EnableImage { get; set; } = true;
 
+    /// <summary>
+    /// Allows images with base64 data URI sources (<c>src="data:image/..."</c>) to be parsed and kept.
+    /// When false, such images are silently dropped while parsing HTML. Only effective when <see cref="EnableImage"/> is true.
+    /// </summary>
+    public bool AllowBase64Images { get; set; } = true;
+
     /// <summary>Enables the table toolbar group with insert/edit commands.</summary>
     public bool EnableTable { get; set; } = true;
 
