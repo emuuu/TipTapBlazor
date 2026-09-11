@@ -28,3 +28,4 @@ wwwroot/js/tiptap-bundle.js
 ## OS
 .DS_Store
 Thumbs.db
+/.serena
